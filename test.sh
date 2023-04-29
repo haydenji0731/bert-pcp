@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 SCRIPT_PATH=$1
 MODEL_PATH="./ft/kmer$KMER"
