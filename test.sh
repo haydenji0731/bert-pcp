@@ -10,8 +10,12 @@ KMER=3
 BSIZE=128
 EPOCH=3
 
+echo "checking if the prediction directory is present"
 if [ -d $PRED_PATH ]
 then
+  echo "prediction directory found"
+else
+  echo "prediction directory not found; making it"
   mkdir $PRED_PATH
 fi
 

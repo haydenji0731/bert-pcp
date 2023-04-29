@@ -10,8 +10,12 @@ KMER=3
 BSIZE=128
 EPOCH=3
 
+echo "checking if the output directory is present"
 if [ -d $OUTPUT_PATH ]
 then
+  echo "output directory found"
+else
+  echo "output directory not found; making it"
   mkdir $OUTPUT_PATH
 fi
 
