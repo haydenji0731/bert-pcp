@@ -1,8 +1,8 @@
 #!/bin/sh
 
 SCRIPT_PATH=$1
-MODEL_PATH="./ft/kmer$KMER"
-DATA_PATH="./data/test/"
+MODEL_PATH="./ft/kmer$KMER/"
+DATA_PATH="./data/kmer$KMER/test/"
 PRED_PATH="./results/kmer$KMER"
 
 # TODO: consider changing kmer size to 6

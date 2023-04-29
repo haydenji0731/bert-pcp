@@ -2,8 +2,8 @@
 
 SCRIPT_PATH=$1
 MODEL_PATH=$2
-DATA_PATH="./data/train/kmer$KMER"
-OUTPUT_PATH="./ft/kmer$KMER"
+DATA_PATH="./data/kmer$KMER/train/"
+OUTPUT_PATH="./ft/kmer$KMER/"
 
 # TODO: consider changing kmer size to 6
 KMER=3
