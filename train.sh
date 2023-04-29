@@ -1,14 +1,14 @@
 #!/bin/sh
 
-SCRIPT_PATH=$1
-MODEL_PATH=$2
-DATA_PATH="./data/kmer$KMER/train/"
-OUTPUT_PATH="./ft/kmer$KMER/"
-
 # TODO: consider changing kmer size to 6
 KMER=3
 BSIZE=128
 EPOCH=3
+
+SCRIPT_PATH=$1
+MODEL_PATH=$2
+DATA_PATH="./data/kmer$KMER/train/"
+OUTPUT_PATH="./ft/kmer$KMER/"
 
 echo "checking if the output directory is present"
 if [ -d $OUTPUT_PATH ]

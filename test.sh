@@ -1,14 +1,14 @@
 #!/bin/sh
 
-SCRIPT_PATH=$1
-MODEL_PATH="./ft/kmer$KMER/"
-DATA_PATH="./data/kmer$KMER/test/"
-PRED_PATH="./results/kmer$KMER"
-
 # TODO: consider changing kmer size to 6
 KMER=3
 BSIZE=128
 EPOCH=3
+
+SCRIPT_PATH=$1
+MODEL_PATH="./ft/kmer$KMER/"
+DATA_PATH="./data/kmer$KMER/test/"
+PRED_PATH="./results/kmer$KMER"
 
 echo "checking if the prediction directory is present"
 if [ -d $PRED_PATH ]
