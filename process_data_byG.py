@@ -83,10 +83,13 @@ def split_data(args):
     train_neg = neg_re[~neg_re.gene_id.isin(val_neg_comb.gene_id)].dropna()
     train_pos_len = len(train_pos.index)
     train_neg_len = len(train_neg.index)
-    over_count = train_pos_len - train_neg_len
-    train_neg_over = train_neg.sample(over_count, replace=True, random_state=args.seed)
-    train_neg_comb = pd.concat([train_neg, train_neg_over], axis=0).sample(frac=1, random_state=args.seed)
-    df_train = pd.merge(train_pos, train_neg_comb, how='outer').sample(frac=1, random_state=args.seed)
+    train_pos_under = train_pos.sample(train_neg_len, random_state=args.seed)
+    # over_count = train_pos_len - train_neg_len
+    # print(len(train_pos_under.index))
+    # print(len(train_neg.index))
+    # train_neg_over = train_neg.sample(over_count, replace=True, random_state=args.seed)
+    # train_neg_comb = pd.concat([train_neg, train_neg_over], axis=0).sample(frac=1, random_state=args.seed)
+    df_train = pd.merge(train_pos_under, train_neg, how='outer').sample(frac=1, random_state=args.seed)
 
     test_dir = os.path.join(args.out_dir, "test")
     train_val_dir = os.path.join(args.out_dir, "train")
