@@ -3,7 +3,7 @@
 # TODO: consider changing kmer size to 6
 KMER=3
 BSIZE=128
-EPOCH=3
+EPOCH=1
 
 SCRIPT_PATH=$1
 MODEL_PATH=$2
@@ -27,4 +27,4 @@ python $SCRIPT_PATH --model_type dna --tokenizer_name dna$KMER \
   --learning_rate 2e-4 --num_train_epochs $EPOCH --output_dir $OUTPUT_PATH \
   --evaluate_during_training --logging_steps 100 --save_steps 4000 \
   --warmup_percent 0.1 --hidden_dropout_prob 0.1 --overwrite_output \
-  --weight_decay 0.01 --n_process 8
+  --weight_decay 0.01 --n_process 4

@@ -51,7 +51,7 @@ def kmerize(args):
             label = label_d[tid]
         else:
             gid = gtf_d[tid]
-            out_fh.write(gid + "\t" + seq2kmer(line[:-1], args.kmer_size) + "\t" + str(label) + "\n")
+            out_fh.write(gid + "\t" + seq2kmer(line[:-1], args.kmer_size).upper() + "\t" + str(label) + "\n")
     fa_fh.close()
     out_fh.close()
 
@@ -79,8 +79,14 @@ def split_data(args):
     val_neg_comb = pd.merge(val_neg, val_neg_sameG, how='outer')
     df_val = pd.merge(val_pos_comb, val_neg_comb, how='outer').sample(frac=1, random_state=args.seed)
     train_pos = pos_re[~pos_re.gene_id.isin(val_pos_comb.gene_id)].dropna()
+    # print(len(train_pos.index))
     train_neg = neg_re[~neg_re.gene_id.isin(val_neg_comb.gene_id)].dropna()
-    df_train = pd.merge(train_pos, train_neg, how='outer').sample(frac=1, random_state=args.seed)
+    train_pos_len = len(train_pos.index)
+    train_neg_len = len(train_neg.index)
+    over_count = train_pos_len - train_neg_len
+    train_neg_over = train_neg.sample(over_count, replace=True, random_state=args.seed)
+    train_neg_comb = pd.concat([train_neg, train_neg_over], axis=0).sample(frac=1, random_state=args.seed)
+    df_train = pd.merge(train_pos, train_neg_comb, how='outer').sample(frac=1, random_state=args.seed)
 
     test_dir = os.path.join(args.out_dir, "test")
     train_val_dir = os.path.join(args.out_dir, "train")
