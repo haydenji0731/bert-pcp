@@ -44,13 +44,14 @@ def kmerize(args):
     label_fh.close()
     seq = ""
     # seq_mu = 0
-    # total_seq = 0
+    total_seq = 0
     for line in fa_fh:
         if line[0] == '>':
             if seq != "":
                 # seq_mu += len(seq)
                 # total_seq += 1
-                if len(seq) < 2001:
+                if len(seq) < 522:
+                    total_seq += 1
                     gid = gtf_d[tid]
                     out_fh.write(gid + "\t" + seq2kmer(seq, args.kmer_size).upper() + "\t" + str(label) + "\n")
                 seq = ""
@@ -61,7 +62,7 @@ def kmerize(args):
             label = label_d[tid]
         else:
             seq += line[:-1]
-    if len(seq) < 2001:
+    if len(seq) < 522:
         gid = gtf_d[tid]
         out_fh.write(gid + "\t" + seq2kmer(seq[:-1], args.kmer_size).upper() + "\t" + str(label) + "\n")
     # seq_mu += len(seq)
@@ -70,7 +71,7 @@ def kmerize(args):
     #     over512 += 1
     # print(over512)
     # seq_mu /= total_seq
-    # print(seq_mu)
+    print(total_seq)
     fa_fh.close()
     out_fh.close()
 
@@ -98,17 +99,16 @@ def split_data(args):
     val_neg_comb = pd.merge(val_neg, val_neg_sameG, how='outer')
     df_val = pd.merge(val_pos_comb, val_neg_comb, how='outer').sample(frac=1, random_state=args.seed)
     train_pos = pos_re[~pos_re.gene_id.isin(val_pos_comb.gene_id)].dropna()
-    # print(len(train_pos.index))
     train_neg = neg_re[~neg_re.gene_id.isin(val_neg_comb.gene_id)].dropna()
     train_pos_len = len(train_pos.index)
     train_neg_len = len(train_neg.index)
-    train_pos_under = train_pos.sample(train_neg_len, random_state=args.seed)
-    # over_count = train_pos_len - train_neg_len
+    # train_neg_under = train_neg.sample(train_pos_len, random_state=args.seed)
+    under_count = train_neg_len - train_pos_len
     # print(len(train_pos_under.index))
     # print(len(train_neg.index))
-    # train_neg_over = train_neg.sample(over_count, replace=True, random_state=args.seed)
+    train_neg_under = train_neg.sample(under_count, random_state=args.seed)
     # train_neg_comb = pd.concat([train_neg, train_neg_over], axis=0).sample(frac=1, random_state=args.seed)
-    df_train = pd.merge(train_pos_under, train_neg, how='outer').sample(frac=1, random_state=args.seed)
+    df_train = pd.merge(train_pos, train_neg_under, how='outer').sample(frac=1, random_state=args.seed)
 
     test_dir = os.path.join(args.out_dir, "test")
     train_val_dir = os.path.join(args.out_dir, "train")
@@ -138,9 +138,12 @@ def main():
     # consider changing this to 6; DNABERT used 6 instead of 3
     parser.add_argument("--kmer_size", type=int, help="", default=3, required=False)
     parser.add_argument("--seed", type=int, help="", default=0, required=False)
-    parser.add_argument("--train_frac", type=float, help="", default=0.999, required=False)
-    parser.add_argument("--val_frac", type=float, help="", default=0.0005, required=False)
-    parser.add_argument("--test_frac", type=float, help="", default=0.0005, required=False)
+    # parser.add_argument("--train_frac", type=float, help="", default=0.999, required=False)
+    # parser.add_argument("--val_frac", type=float, help="", default=0.0005, required=False)
+    # parser.add_argument("--test_frac", type=float, help="", default=0.0005, required=False)
+    parser.add_argument("--train_frac", type=float, help="", default=0.8, required=False)
+    parser.add_argument("--val_frac", type=float, help="", default=0.1, required=False)
+    parser.add_argument("--test_frac", type=float, help="", default=0.1, required=False)
     args = parser.parse_args()
     train_frac = args.train_frac
     val_frac = args.val_frac
