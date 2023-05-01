@@ -42,16 +42,35 @@ def kmerize(args):
         label = int(line.split("\t")[1])
         label_d[tid] = label
     label_fh.close()
+    seq = ""
+    # seq_mu = 0
+    # total_seq = 0
     for line in fa_fh:
         if line[0] == '>':
+            if seq != "":
+                # seq_mu += len(seq)
+                # total_seq += 1
+                if len(seq) < 2001:
+                    gid = gtf_d[tid]
+                    out_fh.write(gid + "\t" + seq2kmer(seq, args.kmer_size).upper() + "\t" + str(label) + "\n")
+                seq = ""
             if len(line.split(" ")) > 1:
                 tid = line.replace('>', '').split(" ")[0]
             else:
                 tid = line.replace('>', '')[:-1]
             label = label_d[tid]
         else:
-            gid = gtf_d[tid]
-            out_fh.write(gid + "\t" + seq2kmer(line[:-1], args.kmer_size).upper() + "\t" + str(label) + "\n")
+            seq += line[:-1]
+    if len(seq) < 2001:
+        gid = gtf_d[tid]
+        out_fh.write(gid + "\t" + seq2kmer(seq[:-1], args.kmer_size).upper() + "\t" + str(label) + "\n")
+    # seq_mu += len(seq)
+    # total_seq += 1
+    # if len(seq) > 512:
+    #     over512 += 1
+    # print(over512)
+    # seq_mu /= total_seq
+    # print(seq_mu)
     fa_fh.close()
     out_fh.close()
 
