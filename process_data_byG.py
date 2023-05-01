@@ -50,7 +50,7 @@ def kmerize(args):
             if seq != "":
                 # seq_mu += len(seq)
                 # total_seq += 1
-                if len(seq) < 522:
+                if len(seq) < 2001:
                     total_seq += 1
                     gid = gtf_d[tid]
                     out_fh.write(gid + "\t" + seq2kmer(seq, args.kmer_size).upper() + "\t" + str(label) + "\n")
@@ -62,7 +62,7 @@ def kmerize(args):
             label = label_d[tid]
         else:
             seq += line[:-1]
-    if len(seq) < 522:
+    if len(seq) < 2001:
         gid = gtf_d[tid]
         out_fh.write(gid + "\t" + seq2kmer(seq[:-1], args.kmer_size).upper() + "\t" + str(label) + "\n")
     # seq_mu += len(seq)
@@ -71,7 +71,7 @@ def kmerize(args):
     #     over512 += 1
     # print(over512)
     # seq_mu /= total_seq
-    print(total_seq)
+    # print(total_seq)
     fa_fh.close()
     out_fh.close()
 
@@ -100,15 +100,15 @@ def split_data(args):
     df_val = pd.merge(val_pos_comb, val_neg_comb, how='outer').sample(frac=1, random_state=args.seed)
     train_pos = pos_re[~pos_re.gene_id.isin(val_pos_comb.gene_id)].dropna()
     train_neg = neg_re[~neg_re.gene_id.isin(val_neg_comb.gene_id)].dropna()
-    train_pos_len = len(train_pos.index)
-    train_neg_len = len(train_neg.index)
+    # train_pos_len = len(train_pos.index)
+    # train_neg_len = len(train_neg.index)
     # train_neg_under = train_neg.sample(train_pos_len, random_state=args.seed)
-    under_count = train_neg_len - train_pos_len
+    # under_count = train_neg_len - train_pos_len
     # print(len(train_pos_under.index))
     # print(len(train_neg.index))
-    train_neg_under = train_neg.sample(under_count, random_state=args.seed)
+    # train_neg_under = train_neg.sample(under_count, random_state=args.seed)
     # train_neg_comb = pd.concat([train_neg, train_neg_over], axis=0).sample(frac=1, random_state=args.seed)
-    df_train = pd.merge(train_pos, train_neg_under, how='outer').sample(frac=1, random_state=args.seed)
+    df_train = pd.merge(train_pos, train_neg, how='outer').sample(frac=1, random_state=args.seed)
 
     test_dir = os.path.join(args.out_dir, "test")
     train_val_dir = os.path.join(args.out_dir, "train")

@@ -20,9 +20,9 @@ else
 fi
 
 # TODO: check bsize
-python $SCRIPT_PATH --model_type dnalong --tokenizer_name dna$KMER \
+python $SCRIPT_PATH --model_type dna --tokenizer_name dna$KMER \
   --model_name_or_path $MODEL_PATH --task_name dnaprom \
-  --do_train --data_dir $DATA_PATH --max_seq_length 521 \
+  --do_train --data_dir $DATA_PATH --max_seq_length 100 \
   --per_gpu_eval_batch_size=$BSIZE --per_gpu_train_batch_size=$BSIZE \
   --learning_rate 1e-5 --num_train_epochs $EPOCH --output_dir $OUTPUT_PATH \
    --logging_steps 100 --save_steps 4000 \
