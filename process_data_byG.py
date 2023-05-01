@@ -50,10 +50,10 @@ def kmerize(args):
             if seq != "":
                 # seq_mu += len(seq)
                 # total_seq += 1
-                if len(seq) < 2001:
-                    total_seq += 1
-                    gid = gtf_d[tid]
-                    out_fh.write(gid + "\t" + seq2kmer(seq, args.kmer_size).upper() + "\t" + str(label) + "\n")
+                # if len(seq) < 2001:
+                total_seq += 1
+                gid = gtf_d[tid]
+                out_fh.write(gid + "\t" + seq2kmer(seq, args.kmer_size).upper() + "\t" + str(label) + "\n")
                 seq = ""
             if len(line.split(" ")) > 1:
                 tid = line.replace('>', '').split(" ")[0]
@@ -62,9 +62,9 @@ def kmerize(args):
             label = label_d[tid]
         else:
             seq += line[:-1]
-    if len(seq) < 2001:
-        gid = gtf_d[tid]
-        out_fh.write(gid + "\t" + seq2kmer(seq[:-1], args.kmer_size).upper() + "\t" + str(label) + "\n")
+    # if len(seq) < 2001:
+    gid = gtf_d[tid]
+    out_fh.write(gid + "\t" + seq2kmer(seq[:-1], args.kmer_size).upper() + "\t" + str(label) + "\n")
     # seq_mu += len(seq)
     # total_seq += 1
     # if len(seq) > 512:
@@ -100,15 +100,16 @@ def split_data(args):
     df_val = pd.merge(val_pos_comb, val_neg_comb, how='outer').sample(frac=1, random_state=args.seed)
     train_pos = pos_re[~pos_re.gene_id.isin(val_pos_comb.gene_id)].dropna()
     train_neg = neg_re[~neg_re.gene_id.isin(val_neg_comb.gene_id)].dropna()
-    # train_pos_len = len(train_pos.index)
-    # train_neg_len = len(train_neg.index)
+    train_pos_len = len(train_pos.index)
+    train_neg_len = len(train_neg.index)
     # train_neg_under = train_neg.sample(train_pos_len, random_state=args.seed)
-    # under_count = train_neg_len - train_pos_len
+    over_count = train_pos_len - train_neg_len
     # print(len(train_pos_under.index))
     # print(len(train_neg.index))
+    train_neg_over = train_neg.sample(over_count, replace=True, random_state=args.seed)
     # train_neg_under = train_neg.sample(under_count, random_state=args.seed)
-    # train_neg_comb = pd.concat([train_neg, train_neg_over], axis=0).sample(frac=1, random_state=args.seed)
-    df_train = pd.merge(train_pos, train_neg, how='outer').sample(frac=1, random_state=args.seed)
+    train_neg_comb = pd.concat([train_neg, train_neg_over], axis=0).sample(frac=1, random_state=args.seed)
+    df_train = pd.merge(train_pos, train_neg_comb, how='outer').sample(frac=1, random_state=args.seed)
 
     test_dir = os.path.join(args.out_dir, "test")
     train_val_dir = os.path.join(args.out_dir, "train")
@@ -138,12 +139,12 @@ def main():
     # consider changing this to 6; DNABERT used 6 instead of 3
     parser.add_argument("--kmer_size", type=int, help="", default=3, required=False)
     parser.add_argument("--seed", type=int, help="", default=0, required=False)
-    # parser.add_argument("--train_frac", type=float, help="", default=0.999, required=False)
-    # parser.add_argument("--val_frac", type=float, help="", default=0.0005, required=False)
-    # parser.add_argument("--test_frac", type=float, help="", default=0.0005, required=False)
-    parser.add_argument("--train_frac", type=float, help="", default=0.8, required=False)
-    parser.add_argument("--val_frac", type=float, help="", default=0.1, required=False)
-    parser.add_argument("--test_frac", type=float, help="", default=0.1, required=False)
+    parser.add_argument("--train_frac", type=float, help="", default=0.999, required=False)
+    parser.add_argument("--val_frac", type=float, help="", default=0.0005, required=False)
+    parser.add_argument("--test_frac", type=float, help="", default=0.0005, required=False)
+    # parser.add_argument("--train_frac", type=float, help="", default=0.8, required=False)
+    # parser.add_argument("--val_frac", type=float, help="", default=0.1, required=False)
+    # parser.add_argument("--test_frac", type=float, help="", default=0.1, required=False)
     args = parser.parse_args()
     train_frac = args.train_frac
     val_frac = args.val_frac
