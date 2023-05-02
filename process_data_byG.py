@@ -50,10 +50,10 @@ def kmerize(args):
             if seq != "":
                 # seq_mu += len(seq)
                 # total_seq += 1
-                # if len(seq) < 2001:
-                total_seq += 1
-                gid = gtf_d[tid]
-                out_fh.write(gid + "\t" + seq2kmer(seq, args.kmer_size).upper() + "\t" + str(label) + "\n")
+                if len(seq) < 4001:
+                    total_seq += 1
+                    gid = gtf_d[tid]
+                    out_fh.write(gid + "\t" + seq2kmer(seq, args.kmer_size).upper() + "\t" + str(label) + "\n")
                 seq = ""
             if len(line.split(" ")) > 1:
                 tid = line.replace('>', '').split(" ")[0]
@@ -62,9 +62,10 @@ def kmerize(args):
             label = label_d[tid]
         else:
             seq += line[:-1]
-    # if len(seq) < 2001:
-    gid = gtf_d[tid]
-    out_fh.write(gid + "\t" + seq2kmer(seq[:-1], args.kmer_size).upper() + "\t" + str(label) + "\n")
+    if len(seq) < 4001:
+        total_seq += 1
+        gid = gtf_d[tid]
+        out_fh.write(gid + "\t" + seq2kmer(seq[:-1], args.kmer_size).upper() + "\t" + str(label) + "\n")
     # seq_mu += len(seq)
     # total_seq += 1
     # if len(seq) > 512:
@@ -139,9 +140,9 @@ def main():
     # consider changing this to 6; DNABERT used 6 instead of 3
     parser.add_argument("--kmer_size", type=int, help="", default=3, required=False)
     parser.add_argument("--seed", type=int, help="", default=0, required=False)
-    parser.add_argument("--train_frac", type=float, help="", default=0.999, required=False)
-    parser.add_argument("--val_frac", type=float, help="", default=0.0005, required=False)
-    parser.add_argument("--test_frac", type=float, help="", default=0.0005, required=False)
+    parser.add_argument("--train_frac", type=float, help="", default=0.9, required=False)
+    parser.add_argument("--val_frac", type=float, help="", default=0.05, required=False)
+    parser.add_argument("--test_frac", type=float, help="", default=0.05, required=False)
     # parser.add_argument("--train_frac", type=float, help="", default=0.8, required=False)
     # parser.add_argument("--val_frac", type=float, help="", default=0.1, required=False)
     # parser.add_argument("--test_frac", type=float, help="", default=0.1, required=False)
