@@ -44,7 +44,7 @@ def kmerize(args):
         label_d[tid] = label
     label_fh.close()
     seq = ""
-    max_len = -math.inf
+    # max_len = -math.inf
     # seq_mu = 0
     total_seq = 0
     for line in fa_fh:
@@ -52,9 +52,9 @@ def kmerize(args):
             if seq != "":
                 # seq_mu += len(seq)
                 # total_seq += 1
-                # if len(seq) < 8001:
-                if max_len < len(seq):
-                    max_len = len(seq)
+                # # if len(seq) < 8001:
+                # if max_len < len(seq):
+                #     max_len = len(seq)
                 total_seq += 1
                 gid = gtf_d[tid]
                 out_fh.write(gid + "\t" + seq2kmer(seq, args.kmer_size).upper() + "\t" + str(label) + "\n")
@@ -67,8 +67,8 @@ def kmerize(args):
         else:
             seq += line[:-1]
     # if len(seq) < 8001:
-    if max_len < len(seq):
-        max_len = len(seq)
+    # if max_len < len(seq):
+    #     max_len = len(seq)
     total_seq += 1
     gid = gtf_d[tid]
     out_fh.write(gid + "\t" + seq2kmer(seq[:-1], args.kmer_size).upper() + "\t" + str(label) + "\n")
@@ -79,7 +79,7 @@ def kmerize(args):
     # print(over512)
     # seq_mu /= total_seq
     # print(total_seq)
-    print(max_len)
+    # print(max_len)
     fa_fh.close()
     out_fh.close()
 
