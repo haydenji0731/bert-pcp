@@ -50,7 +50,7 @@ def kmerize(args):
             if seq != "":
                 # seq_mu += len(seq)
                 # total_seq += 1
-                if len(seq) < 3001:
+                if len(seq) < 4001:
                     total_seq += 1
                     gid = gtf_d[tid]
                     out_fh.write(gid + "\t" + seq2kmer(seq, args.kmer_size).upper() + "\t" + str(label) + "\n")
@@ -62,7 +62,7 @@ def kmerize(args):
             label = label_d[tid]
         else:
             seq += line[:-1]
-    if len(seq) < 3001:
+    if len(seq) < 4001:
         total_seq += 1
         gid = gtf_d[tid]
         out_fh.write(gid + "\t" + seq2kmer(seq[:-1], args.kmer_size).upper() + "\t" + str(label) + "\n")
