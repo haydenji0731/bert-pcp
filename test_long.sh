@@ -1,7 +1,7 @@
 #!/bin/sh
 
 KMER=3
-BSIZE=8
+BSIZE=4
 EPOCH=3
 
 SCRIPT_PATH=$1
