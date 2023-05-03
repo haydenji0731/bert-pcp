@@ -20,7 +20,7 @@ else
   mkdir $PRED_PATH
 fi
 
-python $SCRIPT_PATH --model_type dna --tokenizer_name=dna$KMER \
+python $SCRIPT_PATH --model_type dnalong --tokenizer_name=dna$KMER \
   --model_name_or_path $MODEL_PATH --task_name dnaprom --do_predict \
-  --data_dir $DATA_PATH --max_seq_length 100 --per_gpu_pred_batch_size=$BSIZE \
+  --data_dir $DATA_PATH --max_seq_length 2084 --per_gpu_pred_batch_size=$BSIZE \
   --output_dir $MODEL_PATH --predict_dir $PRED_PATH --n_process 32

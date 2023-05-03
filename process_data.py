@@ -75,7 +75,6 @@ def main():
     parser.add_argument("-in_fasta", type=str, help="full path please", required=True)
     parser.add_argument("-label", type=str, help="", required=True)
     parser.add_argument("-out_dir", type=str, help="", required=True)
-    # consider changing this to 6; DNABERT used 6 instead of 3
     parser.add_argument("--kmer_size", type=int, help="", default=3, required=False)
     parser.add_argument("--seed", type=int, help="", default=0, required=False)
     parser.add_argument("--train_frac", type=float, help="", default=0.8, required=False)
