@@ -2,13 +2,12 @@
 
 KMER=3
 BSIZE=4
-EPOCH=3
 
 SCRIPT_PATH=$1
 IS_BASE=$2
 if [[ $IS_BASE == 1 ]]
 then
-  MODEL_PATH="../3-new-12w-0/"
+  MODEL_PATH="./ft/base_kmer$KMER/"
   PRED_PATH="./results/base_kmer$KMER"
 else
   MODEL_PATH="./ft/kmer$KMER/"
