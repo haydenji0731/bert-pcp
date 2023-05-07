@@ -71,6 +71,17 @@ def split_data(args):
     neg = df_seq[df_seq['label'] == 0]
     test_pos = pos.sample(frac=args.test_frac, random_state=args.seed)
     test_neg = neg.sample(frac=args.test_frac, random_state=args.seed)
+
+    # code for retrieving list of pos/neg genes included in the test set 
+    # pos_fh = open("test_pos_gid.txt", 'w')
+    # for gene in test_pos.gene_id:
+    #     pos_fh.write(gene + "\n")
+    # pos_fh.close()
+    # neg_fh = open("test_neg_gid.txt", 'w')
+    # for gene in test_neg.gene_id:
+    #    neg_fh.write(gene + "\n")
+    # neg_fh.close()
+
     test_pos_sameG = pos[pos.gene_id.isin(test_pos.gene_id)].dropna()
     test_neg_sameG = neg[neg.gene_id.isin(test_neg.gene_id)].dropna()
     test_pos_comb = pd.merge(test_pos, test_pos_sameG, how='outer')
