@@ -6,7 +6,7 @@ import numpy as np
 transcript = list()
 OUTPUT_TSV_FILE = "dev.tsv"
 OUTPUT_FA_FILE = "dev.fa"
-OUTPUT_NPY_FILE = "annotation.npy"
+OUTPUT_NPY_FILE = "annotation_binary.npy"
 
 
 def retrieve_transcript(args):
